@@ -84,7 +84,7 @@ tmux_conf_24b_colour=auto
 tmux_conf_theme=enabled
 
 # default theme
-tmux_conf_theme_colour_1="#212121"    # dark gray #080808
+tmux_conf_theme_colour_1="#1e222a"    # dark gray #080808,#212121
 tmux_conf_theme_colour_2="#303030"    # gray
 tmux_conf_theme_colour_3="#8a8a8a"    # light gray
 tmux_conf_theme_colour_4="#00afff"    # light blue
@@ -372,7 +372,7 @@ tmux_conf_theme_clock_style="24"
 #   - false (default)
 #   - disabled
 # on Linux, this requires xsel, xclip or wl-copy
-tmux_conf_copy_to_os_clipboard=false
+tmux_conf_copy_to_os_clipboard=true
 
 
 # -- urlscan -------------------------------------------------------------------
@@ -385,12 +385,15 @@ tmux_conf_urlscan_options="--compact --dedupe"
 
 # this is the place to override or undo settings
 
+# set -g status-position top
+
 set -sg repeat-time 200
 
 set -g history-limit 3000
 
 # install tmux-256color https://gist.github.com/bbqtd/a4ac060d6f6b9ea6fe3aabe735aa9d95
-set -g default-terminal "tmux-256color"
+# set -g default-terminal "tmux-256color"
+set -g default-terminal "${TERM}"
 # set -as terminal-overrides ",xterm*:Tc:sitm=\E[3m"
 
 # if you"re running tmux within iTerm2
@@ -409,6 +412,8 @@ set -g status-keys vi
 set -g mode-keys vi
 set-window-option -g mode-keys vi
 
+set -g status-interval 30
+
 # replace C-b by C-e instead of using both prefixes
 set -gu prefix2
 unbind C-a
@@ -419,13 +424,16 @@ bind C-e send-prefix
 bind -n End send-key C-e
 bind -n Home send-key C-a
 
+unbind C-h
+unbind C-l
+bind -r p previous-window # select previous window
+bind -r n next-window     # select next window
+
 unbind '"'
 unbind %
 
-set -g status-interval 30
-
-bind '-' split-window -v # -c '#{pane_current_path}'
-bind '\' split-window -h # -c '#{pane_current_path}'
+bind s split-window -v # -c '#{pane_current_path}'
+bind v split-window -h # -c '#{pane_current_path}'
 
 bind P paste-buffer -p  # paste from the top paste buffer
 bind p choose-buffer    # choose which buffer to paste from
